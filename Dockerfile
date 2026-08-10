@@ -1,7 +1,11 @@
 FROM openresty/openresty:alpine
 
-# Install envsubst or lua-cjson if needed
-RUN apk add --no-cache gettext
+# Install dependencies and OpenResty Lua modules
+RUN apk add --no-cache gettext perl curl \
+    && opm get SkyLothar/lua-resty-jwt \
+    && opm get ledgetech/lua-resty-http \
+    && find /usr/local/openresty -name "*.lua" -exec sed -i 's/EVP_MD_CTX_create/EVP_MD_CTX_new/g' {} + \
+    && find /usr/local/openresty -name "*.lua" -exec sed -i 's/EVP_MD_CTX_destroy/EVP_MD_CTX_free/g' {} +
 
 # Copy Nginx master configuration and virtual hosts
 COPY nginx.conf /etc/nginx/nginx.conf
