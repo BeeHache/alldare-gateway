@@ -21,7 +21,11 @@ RUN apk add --no-cache gettext perl curl git \
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY conf.d/ /etc/nginx/conf.d/
 COPY lua/ /etc/nginx/lua/
+COPY lua/*.lua /usr/local/openresty/site/lualib/
 COPY certs/ /etc/nginx/certs/
+
+# Symlink lua directory to /usr/local/openresty/nginx/lua for path compatibility
+RUN mkdir -p /usr/local/openresty/nginx && ln -sf /etc/nginx/lua /usr/local/openresty/nginx/lua
 
 EXPOSE 80 443
 

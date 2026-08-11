@@ -1,3 +1,4 @@
+package.path = "/etc/nginx/lua/?.lua;/usr/local/openresty/site/lualib/?.lua;" .. package.path
 local auth_utils = require("auth_utils")
 
 local payload, err = auth_utils.verify_and_extract()
