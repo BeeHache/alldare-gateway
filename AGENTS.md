@@ -39,3 +39,5 @@
 - **Run Container:** `docker run -d -p 80:80 -p 443:443 --name alldare-gateway alldare-gateway`
 - **Nginx Configuration Syntax Check:** `docker exec -it alldare-gateway openresty -t`
 - **Reload Configuration:** `docker exec -it alldare-gateway openresty -s reload`
+
+- **Prohibition of Hardcoded Literals:** Avoid inline hardcoded string literals, raw route paths, or magic numbers across UI components, ViewModels, backend services, or repositories. User-facing strings must be localized via `strings.xml` / `Localizable.strings`, and route keys must use centralized constants (e.g. `StreamKeys`, `SecurityConstants`, or `BuildKonfig`).
