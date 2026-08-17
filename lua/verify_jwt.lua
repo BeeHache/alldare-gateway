@@ -1,9 +1,25 @@
 package.path = "/etc/nginx/lua/?.lua;/usr/local/openresty/site/lualib/?.lua;" .. package.path
 local auth_utils = require("auth_utils")
 
+local method = ngx.req.get_method()
+local token = auth_utils.get_token()
+
+-- Allow unauthenticated GET requests to pass through to public microservice routes
+if method == "GET" and not token then
+    return
+end
+
 local payload, err = auth_utils.verify_and_extract()
 
 if not payload then
+    -- For GET requests with invalid/expired tokens, strip bad token headers so downstream spring security permits public read
+    if method == "GET" then
+        ngx.req.clear_header("Authorization")
+        ngx.req.clear_header("authorization")
+        ngx.req.set_header("Authorization", nil)
+        ngx.req.set_header("authorization", nil)
+        return
+    end
     ngx.status = 401
     ngx.say('{"error": "' .. (err or "unauthorized") .. '"}')
     return ngx.exit(401)

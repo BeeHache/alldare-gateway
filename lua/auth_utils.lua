@@ -4,10 +4,10 @@ local cjson = require("cjson")
 local _M = {}
 
 function _M.get_token()
-    -- Try Authorization Header
-    local auth_header = ngx.var.http_Authorization
+    -- Try Authorization Header (case-insensitive)
+    local auth_header = ngx.var.http_authorization or ngx.var.http_Authorization
     if auth_header then
-        local _, _, token = string.find(auth_header, "Bearer%s+(.+)")
+        local _, _, token = string.find(auth_header, "[Bb][Ee][Aa][Rr][Ee][Rr]%s+(.+)")
         if token then
             return token
         end
