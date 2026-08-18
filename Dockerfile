@@ -18,6 +18,7 @@ RUN apk add --no-cache gettext perl curl git \
     && find /usr/local/openresty -name "*.lua" -exec sed -i 's/EVP_MD_CTX_destroy/EVP_MD_CTX_free/g' {} +
 
 # Copy Nginx master configuration and virtual hosts
+RUN rm -f /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY conf.d/ /etc/nginx/conf.d/
 COPY lua/ /etc/nginx/lua/
