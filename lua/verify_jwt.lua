@@ -1,5 +1,9 @@
 package.path = "/etc/nginx/lua/?.lua;/usr/local/openresty/site/lualib/?.lua;" .. package.path
 local auth_utils = require("auth_utils")
+local correlation_id = require("correlation_id")
+
+-- Always ensure X-Correlation-ID is set on every request
+correlation_id.ensure_correlation_id()
 
 local method = ngx.req.get_method()
 local token = auth_utils.get_token()
